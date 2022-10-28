@@ -10,20 +10,18 @@ class BinPacker(ABC):
 class Online(BinPacker):
 
     def __call__(self, ws: WeightStream):
-        capacity, stream = ws
-        return self._process(capacity, stream)
+        return self._process(*ws)
 
     @abstractmethod
-    def _process(self, c: int, stream: Iterator[int]) -> Solution:
+    def _process(self, capacity: int, weights: Iterator[int]) -> Solution:
         pass
 
 
 class Offline(BinPacker):
 
     def __call__(self, ws: WeightSet):
-        capacity, weights = ws
-        return self._process(capacity, weights)
+        return self._process(*ws)
 
     @abstractmethod
-    def _process(self, c: int, weights: list[int]) -> Solution:
+    def _process(self, capacity: int, weights: list[int]) -> Solution:
         pass

@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
-from os import path
 from random import shuffle, seed
 from . import WeightSet, WeightStream
-
+from .utils import check_file_exists
 
 class DatasetReader(ABC):
 
@@ -33,15 +32,29 @@ class BinppReader(DatasetReader):
     '''Read problem description according to the BinPP format'''
 
     def __init__(self, filename: str) -> None:
-        if not path.exists(filename):
-            raise ValueError(f'Unkown file [{filename}]')
-        self.__filename = filename
+        check_file_exists(filename)
+        self.__filename: str = filename
 
     def _load_data_from_disk(self) -> WeightSet:
         with open(self.__filename, 'r') as reader:
             nb_objects: int = int(reader.readline())
             capacity: int = int(reader.readline())
-            weights = []
-            for _ in range(nb_objects):
-                weights.append(int(reader.readline()))
+            weights: list[int] = [int(reader.readline()) for _ in range(nb_objects)]
             return (capacity, weights)
+
+
+class JBurkardtReader(DatasetReader):
+    '''Read problem description according to the jburkardt format'''
+
+    def __init__(self, capacity_filename: str, weights_filename: str) -> None:
+        check_file_exists(capacity_filename)
+        check_file_exists(weights_filename)
+        self.__capacity_filename = capacity_filename
+        self.__weights_filename = weights_filename
+
+    def _load_data_from_disk(self) -> WeightSet:
+        with open(self.__capacity_filename, 'r') as reader:
+            capacity: int = int(reader.readline())
+        with open(self.__weights_filename, 'r') as reader:
+            weights: list[int] = list(map(int, reader.read().strip().split()))
+        return (capacity, weights)

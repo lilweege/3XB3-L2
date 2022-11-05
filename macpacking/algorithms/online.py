@@ -95,3 +95,48 @@ class WorstFit(Online):
 
         return bins
 
+
+class RefinedFirstFit(Online):
+
+    def _process(self, capacity: int, weights: Iterator[int]) -> Solution:
+        m = 6
+        classes = [([], []) for _ in range(4)]
+        num_b2 = 0
+
+        # A-piece  - size in (1/2, 1]
+        # B1-piece - size in (2/5, 1/2]
+        # B2-piece - size in (1/3, 2/5]
+        # X-piece  - size in (0, 1/3]
+
+        for weight in weights:
+
+            norm_weight = weight / capacity
+            if norm_weight > 1/2:
+                class_num = 1
+            elif norm_weight > 2/5:
+                class_num = 2
+            elif norm_weight > 1/3:
+                num_b2 += 1
+                if num_b2 % m == 0:
+                    class_num = 1
+                else:
+                    class_num = 3
+            else:
+                class_num = 4
+
+            # First fit for the selected class
+            bins, remaining = classes[class_num-1]
+            for i in range(len(remaining)):
+                if remaining[i] >= weight:
+                    remaining[i] -= weight
+                    bins[i].append(weight)
+                    break
+            else:
+                remaining.append(capacity - weight)
+                bins.append([weight])
+
+        solution: Solution = []
+        for bins, _ in classes:
+            if bins:
+                solution.extend(bins)
+        return solution

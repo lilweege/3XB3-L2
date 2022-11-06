@@ -98,6 +98,9 @@ class WorstFit(Online):
 
 class RefinedFirstFit(Online):
 
+    def normalize(self, capacity: int, weights: Iterator[int]) -> Iterator[float]:
+        return map(lambda w: w / capacity, weights)
+
     def _process(self, capacity: int, weights: Iterator[int]) -> Solution:
         m = 6
         classes: list[tuple[Solution, list[int]]] = [([], []) for _ in range(4)]
@@ -108,9 +111,7 @@ class RefinedFirstFit(Online):
         # B2-piece - size in (1/3, 2/5]
         # X-piece  - size in (0, 1/3]
 
-        for weight in weights:
-
-            norm_weight = weight / capacity
+        for norm_weight, weight in zip(self.normalize(capacity, weights), weights):
             if norm_weight > 1/2:
                 class_num = 1
             elif norm_weight > 2/5:

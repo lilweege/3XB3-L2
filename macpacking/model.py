@@ -56,28 +56,28 @@ class Offline(BinPacker):
 
 class OnlineConstantCapacity(Online):
 
-    def __call__(self, ws: WeightStream) -> ConstantCapacityResult:
+    def __call__(self, ws: WeightStream) -> BinPackerResult:
         capacity, weights = ws
         return ConstantCapacityResult(self._process(capacity, weights), capacity)
 
 
 class OnlineConstantBins(Online):
 
-    def __call__(self, ws: WeightStream) -> ConstantBinsResult:
+    def __call__(self, ws: WeightStream) -> BinPackerResult:
         num_bins, weights = ws
         return ConstantBinsResult(self._process(num_bins, weights), num_bins)
 
 
 class OfflineConstantCapacity(Offline):
 
-    def __call__(self, ws: WeightSet) -> ConstantCapacityResult:
+    def __call__(self, ws: WeightSet) -> BinPackerResult:
         capacity, weights = ws
         return ConstantCapacityResult(self._process(capacity, weights), capacity)
 
 
 class OfflineConstantBins(Offline):
 
-    def __call__(self, ws: WeightSet) -> ConstantBinsResult:
+    def __call__(self, ws: WeightSet) -> BinPackerResult:
         num_bins, weights = ws
         return ConstantBinsResult(self._process(num_bins, weights), num_bins)
 

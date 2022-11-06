@@ -1,6 +1,5 @@
 import pyperf
-from os import listdir
-from os.path import isfile, join, basename
+from os.path import basename
 from macpacking.reader import BinppReader
 from macpacking.model import Online, Offline
 from macpacking.algorithms.num_bins.offline import Greedy, MultiFit
@@ -9,7 +8,7 @@ from macpacking import WeightSet
 
 
 def all_cases():
-    return [ './_datasets/binpp/N4C3W4/N4C3W4_A.BPP.txt' ]
+    return ['./_datasets/binpp/N4C3W4/N4C3W4_A.BPP.txt']
 
 
 def all_num_bins():
@@ -46,9 +45,9 @@ def main():
         for num_bins in all_num_bins():
             for case in all_cases():
                 name = get_case_name(case)
-                data = get_case_data(case)
+                data = (num_bins, get_case_data(case)[1])
                 bench_name = make_bench_name(name, algorithm)
-                runner.bench_func(bench_name + f"_{num_bins}", algorithm, (num_bins, data[1]))
+                runner.bench_func(bench_name + f"_{num_bins}", algorithm, data)
 
 
 if __name__ == "__main__":

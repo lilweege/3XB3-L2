@@ -1,4 +1,4 @@
-from ... import Solution, WeightStream
+from ... import Solution
 from typing import Iterator
 from ...model import OnlineConstantCapacity as Online
 
@@ -98,20 +98,21 @@ class WorstFit(Online):
 
 class RefinedFirstFit(Online):
 
-    def normalize(self, capacity: int, weights: Iterator[int]) -> Iterator[float]:
+    def normalize(self, capacity: int, weights: Iterator[int]):
         return map(lambda w: w / capacity, weights)
 
     def _process(self, capacity: int, weights: Iterator[int]) -> Solution:
         m = 6
-        classes: list[tuple[Solution, list[int]]] = [([], []) for _ in range(4)]
+        classes: list[tuple[Solution, list[int]]] = [
+            ([], []) for _ in range(4)]
         num_b2 = 0
 
         # A-piece  - size in (1/2, 1]
         # B1-piece - size in (2/5, 1/2]
         # B2-piece - size in (1/3, 2/5]
         # X-piece  - size in (0, 1/3]
-
-        for norm_weight, weight in zip(self.normalize(capacity, weights), weights):
+        it = zip(self.normalize(capacity, weights), weights)
+        for norm_weight, weight in it:
             if norm_weight > 1/2:
                 class_num = 1
             elif norm_weight > 2/5:

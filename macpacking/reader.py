@@ -3,6 +3,7 @@ from random import shuffle, seed
 from . import WeightSet, WeightStream
 from .utils import check_file_exists
 
+
 class DatasetReader(ABC):
 
     def offline(self) -> WeightSet:
@@ -39,7 +40,9 @@ class BinppReader(DatasetReader):
         with open(self.__filename, 'r') as reader:
             nb_objects: int = int(reader.readline())
             capacity: int = int(reader.readline())
-            weights: list[int] = [int(reader.readline()) for _ in range(nb_objects)]
+            weights: list[int] = [
+                int(reader.readline()) for _ in range(nb_objects)
+            ]
             return (capacity, weights)
 
 

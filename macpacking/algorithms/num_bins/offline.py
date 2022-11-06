@@ -1,4 +1,4 @@
-from ... import Solution, WeightSet
+from ... import Solution
 from ...model import OfflineConstantBins as Offline
 from ..capacity.online import FirstFit
 
@@ -41,4 +41,3 @@ class MultiFit(Offline):
                 lower_bound = capacity
 
         return FirstFit()((upper_bound, iter(sorted_items))).solution
-

@@ -28,4 +28,3 @@ def read_csv_contents(filename):
     with open(filename, "r", encoding='utf-8-sig') as file:
         return [{k: autoconvert(v) for k, v in row.items()}
                 for row in csv.DictReader(file, delimiter=',', quotechar='"')]
-

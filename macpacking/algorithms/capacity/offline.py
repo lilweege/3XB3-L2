@@ -1,6 +1,6 @@
-from ... import Solution, WeightSet
+from ... import Solution
 from ...model import OfflineConstantCapacity as Offline
-from .online import NextFit as Nf_online, FirstFit, BestFit, WorstFit, RefinedFirstFit
+from .online import NextFit as Nf_online, FirstFit, BestFit, WorstFit
 
 
 class NextFit(Offline):

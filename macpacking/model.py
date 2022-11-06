@@ -21,7 +21,7 @@ class ConstantCapacityResult(BinPackerResult):
         half_cap = ceil(self.capacity / 2)
         max_fullness = half_cap * self.num_bins
         measure = (abs(half_cap - sum(weights)) for weights in self.solution)
-        self.wastefulness = max_fullness - round(sum(measure) / self.num_bins, 4)
+        self.wastefulness = max_fullness - sum(measure)
 
 
 @dataclass(order=True)

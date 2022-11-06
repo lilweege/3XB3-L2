@@ -7,8 +7,12 @@ from . import WeightStream, WeightSet, Solution
 
 @dataclass(order=True)
 class BinPackerResult:
-    capacity: int = field(compare=False, repr=False)
     solution: Solution = field(compare=False, repr=False)
+
+
+@dataclass(order=True)
+class ConstantCapacityResult(BinPackerResult):
+    capacity: int = field(compare=False, repr=False)
     num_bins: int = field(init=False)
     wastefulness: float = field(init=False)
 
@@ -20,27 +24,61 @@ class BinPackerResult:
         self.wastefulness = max_fullness - round(sum(measure) / self.num_bins, 4)
 
 
+@dataclass(order=True)
+class ConstantBinsResult(BinPackerResult):
+    num_bins: int = field(compare=False, repr=False)
+    largest: int = field(init=False)
+    difference: int = field(init=False)
+
+    def __post_init__(self):
+        self.largest = max(sum(weights) for weights in self.solution)
+        smallest = min(sum(weights) for weights in self.solution)
+        self.difference = self.largest - smallest
+
+
 class BinPacker(ABC):
     pass
 
 
 class Online(BinPacker):
 
-    def __call__(self, ws: WeightStream) -> BinPackerResult:
-        capacity, weights = ws
-        return BinPackerResult(capacity, self._process(capacity, weights))
-
     @abstractmethod
-    def _process(self, capacity: int, weights: Iterator[int]) -> Solution:
+    def _process(self, upper_bound: int, weights: Iterator[int]) -> Solution:
         pass
 
 
 class Offline(BinPacker):
 
-    def __call__(self, ws: WeightSet) -> BinPackerResult:
-        capacity, weights = ws
-        return BinPackerResult(capacity, self._process(capacity, weights))
-
     @abstractmethod
-    def _process(self, capacity: int, weights: list[int]) -> Solution:
+    def _process(self, upper_bound: int, weights: list[int]) -> Solution:
         pass
+
+
+class OnlineConstantCapacity(Online):
+
+    def __call__(self, ws: WeightStream) -> ConstantCapacityResult:
+        capacity, weights = ws
+        return ConstantCapacityResult(self._process(capacity, weights), capacity)
+
+
+class OnlineConstantBins(Online):
+
+    def __call__(self, ws: WeightStream) -> ConstantBinsResult:
+        num_bins, weights = ws
+        return ConstantBinsResult(self._process(num_bins, weights), num_bins)
+
+
+class OfflineConstantCapacity(Offline):
+
+    def __call__(self, ws: WeightSet) -> ConstantCapacityResult:
+        capacity, weights = ws
+        return ConstantCapacityResult(self._process(capacity, weights), capacity)
+
+
+class OfflineConstantBins(Offline):
+
+    def __call__(self, ws: WeightSet) -> ConstantBinsResult:
+        num_bins, weights = ws
+        return ConstantBinsResult(self._process(num_bins, weights), num_bins)
+
+

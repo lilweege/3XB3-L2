@@ -1,5 +1,5 @@
-from .. import Solution
-from ..model import Offline
+from ... import Solution
+from ...model import OfflineConstantCapacity as Offline
 import binpacking as bp
 
 

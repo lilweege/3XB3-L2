@@ -3,9 +3,9 @@ from os import listdir
 from os.path import isfile, join, basename
 from macpacking.reader import BinppReader
 from macpacking.model import Online, Offline
-from macpacking.algorithms.online import NextFit as NextFitOn, FirstFit, BestFit, WorstFit, RefinedFirstFit
-from macpacking.algorithms.offline import NextFit as NextFitOff, FirstFitDecreasing, BestFitDecreasing, WorstFitDecreasing
-from macpacking.algorithms.baseline import BenMaier
+from macpacking.algorithms.capacity.online import NextFit as NextFitOn, FirstFit, BestFit, WorstFit, RefinedFirstFit
+from macpacking.algorithms.capacity.offline import NextFit as NextFitOff, FirstFitDecreasing, BestFitDecreasing, WorstFitDecreasing
+from macpacking.algorithms.capacity.baseline import BenMaier
 from macpacking import WeightSet
 
 
@@ -35,7 +35,7 @@ def all_offline() -> list[Offline]:
 
 
 def get_algo_name(obj) -> str:
-    return f"{type(obj).__name__}_{type(obj).__mro__[1].__name__}"
+    return f"{type(obj).__name__}_{type(obj).__mro__[2].__name__}"
 
 
 def make_bench_name(case: str, obj) -> str:

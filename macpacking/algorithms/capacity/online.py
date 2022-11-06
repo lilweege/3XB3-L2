@@ -1,6 +1,6 @@
-from .. import Solution, WeightStream
+from ... import Solution, WeightStream
 from typing import Iterator
-from ..model import Online
+from ...model import OnlineConstantCapacity as Online
 
 
 class NextFit(Online):
@@ -100,7 +100,7 @@ class RefinedFirstFit(Online):
 
     def _process(self, capacity: int, weights: Iterator[int]) -> Solution:
         m = 6
-        classes = [([], []) for _ in range(4)]
+        classes: list[tuple[Solution, list[int]]] = [([], []) for _ in range(4)]
         num_b2 = 0
 
         # A-piece  - size in (1/2, 1]

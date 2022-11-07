@@ -1,10 +1,11 @@
 import pyperf
-from os import listdir
-from os.path import isfile, join, basename
+from os.path import basename
 from macpacking.reader import BinppReader
 from macpacking.model import Online, Offline
-from macpacking.algorithms.capacity.online import NextFit as NextFitOn, FirstFit, BestFit, WorstFit, RefinedFirstFit
-from macpacking.algorithms.capacity.offline import NextFit as NextFitOff, FirstFitDecreasing, BestFitDecreasing, WorstFitDecreasing
+from macpacking.algorithms.capacity.online import NextFit as NextFitOn, \
+    FirstFit, BestFit, WorstFit, RefinedFirstFit
+from macpacking.algorithms.capacity.offline import NextFit as NextFitOff, \
+    FirstFitDecreasing, BestFitDecreasing, WorstFitDecreasing
 from macpacking.algorithms.capacity.baseline import BenMaier
 from macpacking import WeightSet
 
@@ -27,11 +28,19 @@ def get_case_data(case: str) -> WeightSet:
 
 
 def all_online() -> list[Online]:
-    return [NextFitOn(), FirstFit(), BestFit(), WorstFit(), RefinedFirstFit()]
+    return [NextFitOn(),
+            FirstFit(),
+            BestFit(),
+            WorstFit(),
+            RefinedFirstFit()]
 
 
 def all_offline() -> list[Offline]:
-    return [NextFitOff(), FirstFitDecreasing(), BestFitDecreasing(), WorstFitDecreasing(), BenMaier()]
+    return [NextFitOff(),
+            FirstFitDecreasing(),
+            BestFitDecreasing(),
+            WorstFitDecreasing(),
+            BenMaier()]
 
 
 def get_algo_name(obj) -> str:
